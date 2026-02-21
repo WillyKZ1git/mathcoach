@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fonctions — Généralités | Seconde | MathCoach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:       #1a2e4a;
+      --blue:       #2d6a9f;
+      --blue-light: #e8f4fd;
+      --accent:     #4a9fd4;
+      --white:      #ffffff;
+      --text:       #1a1a2e;
+      --text-muted: #5a6a80;
+      --border:     #d4e6f5;
+      --green:      #27ae60;
+      --green-bg:   #eafaf1;
+      --red:        #e74c3c;
+      --red-bg:     #fdf0ef;
+      --yellow-bg:  #fffbea;
+      --yellow:     #f0b429;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: #f7fafd;
+      line-height: 1.7;
+    }
+
+    /* ── NAV ───────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 64px;
+      box-shadow: 0 2px 16px rgba(0,0,0,.2);
+    }
+
+    .nav-logo {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.4rem; font-weight: 900;
+      color: var(--white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-breadcrumb {
+      display: flex; align-items: center; gap: .5rem;
+      font-size: .85rem; color: rgba(255,255,255,.5);
+    }
+    .nav-breadcrumb a { color: rgba(255,255,255,.6); text-decoration: none; transition: color .2s; }
+    .nav-breadcrumb a:hover { color: var(--white); }
+    .nav-breadcrumb .sep { color: rgba(255,255,255,.3); }
+    .nav-breadcrumb .current { color: var(--accent); font-weight: 600; }
+
+    .nav-right { display: flex; align-items: center; gap: 1rem; }
+    .btn-nav {
+      background: var(--accent); color: var(--white);
+      padding: .45rem 1.1rem; border-radius: 6px;
+      font-size: .85rem; font-weight: 600; text-decoration: none;
+      transition: background .2s;
+    }
+    .btn-nav:hover { background: #3a8cc0; }
+
+    /* ── LAYOUT ────────────────────────────────────────── */
+    .page-wrapper {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      grid-template-rows: auto;
+      min-height: 100vh;
+      padding-top: 64px;
+    }
+
+    /* ── SIDEBAR ───────────────────────────────────────── */
+    .sidebar {
+      position: sticky; top: 64px;
+      height: calc(100vh - 64px);
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+    }
+
+    .sidebar-title {
+      font-size: .7rem; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+
+    .sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: .2rem; }
+
+    .sidebar-nav a {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .55rem .8rem; border-radius: 8px;
+      text-decoration: none; font-size: .88rem;
+      color: var(--text-muted); font-weight: 500;
+      transition: background .15s, color .15s;
+    }
+
+    .sidebar-nav a:hover { background: var(--blue-light); color: var(--blue); }
+    .sidebar-nav a.active { background: var(--blue-light); color: var(--blue); font-weight: 600; }
+
+    .sidebar-nav .icon {
+      width: 22px; height: 22px; border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .8rem; flex-shrink: 0;
+      background: var(--blue-light); color: var(--blue);
+    }
+
+    .sidebar-nav a.active .icon { background: var(--blue); color: var(--white); }
+
+    .sidebar-divider { border: none; border-top: 1px solid var(--border); margin: 1.2rem 0; }
+
+    .sidebar-section { margin-bottom: 1.5rem; }
+
+    .progress-wrap { margin-top: .5rem; }
+    .progress-label { display: flex; justify-content: space-between; font-size: .8rem; color: var(--text-muted); margin-bottom: .4rem; }
+    .progress-bar { height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 10px; width: 0%; transition: width .6s ease; }
+
+    /* ── MAIN ──────────────────────────────────────────── */
+    .main-content { padding: 2.5rem 3rem; max-width: 860px; }
+
+    /* Tabs */
+    .tabs {
+      display: flex; gap: .5rem; margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0;
+    }
+
+    .tab-btn {
+      padding: .7rem 1.4rem; border: none; background: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 600;
+      color: var(--text-muted); border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: color .2s, border-color .2s;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .tab-btn:hover { color: var(--blue); }
+    .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    .tab-panel { display: none; animation: fadeIn .3s ease; }
+    .tab-panel.active { display: block; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Chapter header */
+    .chapter-header {
+      background: linear-gradient(135deg, var(--navy) 0%, #1e3d5c 100%);
+      border-radius: 16px; padding: 2rem 2.5rem;
+      margin-bottom: 2rem; position: relative; overflow: hidden;
+    }
+
+    .chapter-header::after {
+      content: 'f(x)';
+      position: absolute; right: 2rem; top: 50%; transform: translateY(-50%);
+      font-family: 'Nunito', sans-serif; font-size: 5rem; font-weight: 900;
+      color: rgba(255,255,255,.06); pointer-events: none;
+    }
+
+    .chapter-meta { display: flex; align-items: center; gap: .8rem; margin-bottom: .8rem; flex-wrap: wrap; }
+
+    .chip {
+      font-size: .72rem; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; padding: .25rem .7rem; border-radius: 20px;
+    }
+    .chip-level { background: rgba(74,159,212,.25); color: var(--accent); }
+    .chip-free  { background: rgba(39,174,96,.2); color: #4cde8f; }
+
+    .chapter-header h1 {
+      font-family: 'Nunito', sans-serif; font-size: 1.8rem; font-weight: 900;
+      color: var(--white); margin-bottom: .4rem;
+    }
+
+    .chapter-header p { color: rgba(255,255,255,.65); font-size: .95rem; }
+
+    /* ── COURS ─────────────────────────────────────────── */
+    .lesson-block { margin-bottom: 2rem; }
+
+    .lesson-block h2 {
+      font-family: 'Nunito', sans-serif; font-size: 1.3rem; font-weight: 800;
+      color: var(--navy); margin-bottom: 1rem;
+      padding-bottom: .5rem; border-bottom: 2px solid var(--blue-light);
+      display: flex; align-items: center; gap: .6rem;
+    }
+
+    .lesson-block h2 .h2-num {
+      width: 28px; height: 28px; background: var(--blue); color: var(--white);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; flex-shrink: 0;
+    }
+
+    .lesson-block h3 {
+      font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 800;
+      color: var(--blue); margin: 1.2rem 0 .5rem;
+    }
+
+    .lesson-block p { font-size: .95rem; color: var(--text); margin-bottom: .8rem; }
+
+    /* Callouts */
+    .callout {
+      border-radius: 10px; padding: 1.2rem 1.5rem; margin: 1.2rem 0;
+      border-left: 4px solid;
+    }
+
+    .callout-def   { background: var(--blue-light); border-color: var(--blue); }
+    .callout-prop  { background: #f0f7ff; border-color: #5b9bd5; }
+    .callout-warn  { background: var(--yellow-bg); border-color: var(--yellow); }
+    .callout-tip   { background: var(--green-bg); border-color: var(--green); }
+
+    .callout-label {
+      font-size: .72rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; margin-bottom: .4rem;
+    }
+    .callout-def  .callout-label { color: var(--blue); }
+    .callout-prop .callout-label { color: #5b9bd5; }
+    .callout-warn .callout-label { color: var(--yellow); }
+    .callout-tip  .callout-label { color: var(--green); }
+
+    .callout p { font-size: .93rem; margin: 0; }
+
+    /* Formule centrée */
+    .formula-box {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 1rem 1.5rem;
+      text-align: center; margin: 1rem 0;
+      font-size: 1.05rem;
+    }
+
+    /* Tableau */
+    .math-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: .9rem; }
+    .math-table th {
+      background: var(--navy); color: var(--white);
+      padding: .6rem 1rem; text-align: left; font-weight: 600;
+    }
+    .math-table td { padding: .6rem 1rem; border-bottom: 1px solid var(--border); }
+    .math-table tr:nth-child(even) td { background: var(--blue-light); }
+
+    /* ── EXERCICES ──────────────────────────────────────── */
+    .exercise {
+      background: var(--white); border-radius: 12px;
+      border: 1.5px solid var(--border);
+      margin-bottom: 1.5rem; overflow: hidden;
+    }
+
+    .exercise-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 1.5rem; background: var(--blue-light);
+      cursor: pointer; user-select: none;
+    }
+
+    .exercise-header-left { display: flex; align-items: center; gap: .8rem; }
+
+    .ex-num {
+      background: var(--blue); color: var(--white);
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Nunito', sans-serif; font-size: .9rem; font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .exercise-title { font-weight: 600; font-size: .95rem; color: var(--navy); }
+
+    .diff-badge {
+      font-size: .7rem; font-weight: 700; padding: .2rem .6rem;
+      border-radius: 20px; letter-spacing: .5px;
+    }
+    .diff-easy   { background: var(--green-bg); color: var(--green); }
+    .diff-medium { background: var(--yellow-bg); color: #b8860b; }
+    .diff-hard   { background: var(--red-bg); color: var(--red); }
+
+    .toggle-icon { font-size: 1.2rem; color: var(--blue); transition: transform .3s; }
+    .exercise.open .toggle-icon { transform: rotate(180deg); }
+
+    .exercise-body { display: none; padding: 1.5rem; }
+    .exercise.open .exercise-body { display: block; }
+
+    .exercise-statement { font-size: .95rem; margin-bottom: 1.2rem; }
+
+    .correction-btn {
+      display: flex; align-items: center; gap: .5rem;
+      background: var(--navy); color: var(--white);
+      border: none; border-radius: 8px; padding: .6rem 1.2rem;
+      font-family: 'DM Sans', sans-serif; font-size: .88rem; font-weight: 600;
+      cursor: pointer; transition: background .2s; margin-bottom: 1rem;
+    }
+    .correction-btn:hover { background: var(--blue); }
+
+    .correction {
+      display: none; background: var(--green-bg);
+      border: 1px solid #a9dfbf; border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+    }
+    .correction.visible { display: block; animation: fadeIn .3s ease; }
+
+    .correction-label {
+      font-size: .72rem; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--green); margin-bottom: .6rem;
+    }
+
+    .correction p, .correction li { font-size: .92rem; }
+
+    .correction ol { padding-left: 1.2rem; display: flex; flex-direction: column; gap: .5rem; }
+
+    /* ── QUIZ ───────────────────────────────────────────── */
+    .quiz-intro {
+      background: var(--white); border-radius: 12px;
+      border: 1.5px solid var(--border); padding: 1.5rem;
+      margin-bottom: 1.5rem; display: flex; align-items: center;
+      justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    }
+
+    .quiz-intro h3 { font-family: 'Nunito', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--navy); }
+    .quiz-intro p  { font-size: .88rem; color: var(--text-muted); margin-top: .2rem; }
+
+    .quiz-stats { display: flex; gap: 1.5rem; }
+    .quiz-stat  { text-align: center; }
+    .quiz-stat-num { font-family: 'Nunito', sans-serif; font-size: 1.6rem; font-weight: 900; color: var(--blue); }
+    .quiz-stat-label { font-size: .72rem; color: var(--text-muted); }
+
+    .btn-start {
+      background: var(--accent); color: var(--white); border: none;
+      padding: .75rem 1.8rem; border-radius: 8px; font-family: 'DM Sans', sans-serif;
+      font-size: .95rem; font-weight: 600; cursor: pointer;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 14px rgba(74,159,212,.35);
+    }
+    .btn-start:hover { background: #3a8cc0; transform: translateY(-1px); }
+
+    /* Quiz questions */
+    #quiz-container { display: none; }
+
+    .quiz-progress-bar {
+      height: 6px; background: var(--border); border-radius: 10px;
+      margin-bottom: 2rem; overflow: hidden;
+    }
+    .quiz-progress-fill {
+      height: 100%; background: var(--accent); border-radius: 10px;
+      transition: width .4s ease;
+    }
+
+    .question-card {
+      background: var(--white); border-radius: 14px;
+      border: 1.5px solid var(--border); padding: 2rem;
+      margin-bottom: 1rem; display: none;
+    }
+    .question-card.current { display: block; animation: fadeIn .3s ease; }
+
+    .question-num { font-size: .78rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: .8rem; }
+
+    .question-text { font-size: 1.05rem; font-weight: 600; color: var(--navy); margin-bottom: 1.4rem; line-height: 1.5; }
+
+    .options { display: flex; flex-direction: column; gap: .7rem; }
+
+    .option {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .9rem 1.2rem; border-radius: 10px;
+      border: 1.5px solid var(--border); cursor: pointer;
+      font-size: .93rem; background: var(--white);
+      transition: border-color .2s, background .2s;
+    }
+    .option:hover:not(.disabled) { border-color: var(--accent); background: var(--blue-light); }
+    .option.selected { border-color: var(--blue); background: var(--blue-light); }
+    .option.correct  { border-color: var(--green); background: var(--green-bg); }
+    .option.wrong    { border-color: var(--red); background: var(--red-bg); }
+    .option.disabled { cursor: default; }
+
+    .option-letter {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--blue-light); color: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .85rem; flex-shrink: 0;
+      transition: background .2s, color .2s;
+    }
+    .option.correct .option-letter { background: var(--green); color: var(--white); }
+    .option.wrong   .option-letter { background: var(--red); color: var(--white); }
+    .option.selected:not(.correct):not(.wrong) .option-letter { background: var(--blue); color: var(--white); }
+
+    .feedback-box {
+      display: none; margin-top: 1rem; padding: 1rem 1.2rem;
+      border-radius: 10px; font-size: .9rem; line-height: 1.5;
+    }
+    .feedback-box.correct { display: block; background: var(--green-bg); border: 1px solid #a9dfbf; color: #1e7e47; }
+    .feedback-box.wrong   { display: block; background: var(--red-bg);   border: 1px solid #f5c6c2; color: #a93226; }
+
+    .quiz-nav {
+      display: flex; justify-content: flex-end; margin-top: 1.5rem;
+    }
+
+    .btn-next {
+      background: var(--blue); color: var(--white); border: none;
+      padding: .7rem 1.6rem; border-radius: 8px; font-family: 'DM Sans', sans-serif;
+      font-size: .9rem; font-weight: 600; cursor: pointer;
+      transition: background .2s; display: none;
+    }
+    .btn-next:hover { background: var(--navy); }
+    .btn-next.visible { display: inline-block; }
+
+    /* Score final */
+    #quiz-result {
+      display: none; text-align: center;
+      background: var(--white); border-radius: 16px;
+      border: 1.5px solid var(--border); padding: 3rem 2rem;
+    }
+
+    .score-ring {
+      width: 120px; height: 120px;
+      border-radius: 50%; margin: 0 auto 1.5rem;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-family: 'Nunito', sans-serif;
+    }
+    .score-ring .score-num { font-size: 2.2rem; font-weight: 900; line-height: 1; }
+    .score-ring .score-total { font-size: .85rem; font-weight: 600; opacity: .7; }
+
+    .score-excellent { background: var(--green-bg); border: 4px solid var(--green); color: var(--green); }
+    .score-good      { background: var(--yellow-bg); border: 4px solid var(--yellow); color: #b8860b; }
+    .score-retry     { background: var(--red-bg);    border: 4px solid var(--red);    color: var(--red); }
+
+    #quiz-result h3 { font-family: 'Nunito', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--navy); margin-bottom: .5rem; }
+    #quiz-result p  { color: var(--text-muted); font-size: .95rem; margin-bottom: 1.5rem; }
+
+    .btn-retry {
+      background: var(--blue); color: var(--white); border: none;
+      padding: .75rem 2rem; border-radius: 8px; font-family: 'DM Sans', sans-serif;
+      font-size: .95rem; font-weight: 600; cursor: pointer; transition: background .2s;
+    }
+    .btn-retry:hover { background: var(--navy); }
+
+    /* ── RESPONSIVE ────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .page-wrapper { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+      .main-content { padding: 1.5rem; }
+      nav { padding: 0 1.5rem; }
+      .nav-breadcrumb { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="nav-logo">Math<span>Coach</span></a>
+  <div class="nav-breadcrumb">
+    <a href="../index.html">Accueil</a>
+    <span class="sep">›</span>
+    <a href="#">Seconde</a>
+    <span class="sep">›</span>
+    <span class="current">Fonctions — Généralités</span>
+  </div>
+  <div class="nav-right">
+    <a href="../reservation.html" class="btn-nav">Réserver une séance</a>
+  </div>
+</nav>
+
+<div class="page-wrapper">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Ce chapitre</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" class="active" onclick="switchTab('cours'); return false;"><span class="icon">📖</span> Cours</a></li>
+        <li><a href="#" onclick="switchTab('exercices'); return false;"><span class="icon">✏️</span> Exercices corrigés</a></li>
+        <li><a href="#" onclick="switchTab('quiz'); return false;"><span class="icon">🎯</span> Quiz</a></li>
+      </ul>
+    </div>
+
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Progression</div>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Quiz complété</span><span id="progressPct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </div>
+
+    <hr class="sidebar-divider">
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Autres chapitres — Seconde</div>
+      <ul class="sidebar-nav">
+        <li><a href="#" style="opacity:.4; pointer-events:none;"><span class="icon">🔒</span> Équations 2nd degré</a></li>
+        <li><a href="#" style="opacity:.4; pointer-events:none;"><span class="icon">🔒</span> Vecteurs & repérage</a></li>
+        <li><a href="#" style="opacity:.4; pointer-events:none;"><span class="icon">🔒</span> Statistiques</a></li>
+      </ul>
+      <div style="margin-top:1rem; background:var(--blue-light); border-radius:10px; padding:.9rem 1rem; font-size:.8rem; color:var(--blue);">
+        <strong>MathCoach+</strong> — Accède à tous les chapitres en illimité.
+        <a href="../reservation.html" style="display:block; margin-top:.4rem; color:var(--blue); font-weight:700;">En savoir plus →</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- Header du chapitre -->
+    <div class="chapter-header">
+      <div class="chapter-meta">
+        <span class="chip chip-level">Seconde</span>
+        <span class="chip chip-free">Accès libre</span>
+      </div>
+      <h1>Fonctions — Généralités et représentations</h1>
+      <p>Notion de fonction, image, antécédent, tableau de valeurs et représentation graphique.</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('cours')" id="tab-cours">📖 Cours</button>
+      <button class="tab-btn" onclick="switchTab('exercices')" id="tab-exercices">✏️ Exercices corrigés</button>
+      <button class="tab-btn" onclick="switchTab('quiz')" id="tab-quiz">🎯 Quiz</button>
+    </div>
+
+    <!-- ═══════════════ COURS ═══════════════ -->
+    <div class="tab-panel active" id="panel-cours">
+
+      <!-- 1. Notion de fonction -->
+      <div class="lesson-block">
+        <h2><span class="h2-num">1</span> Notion de fonction</h2>
+
+        <div class="callout callout-def">
+          <div class="callout-label">Définition</div>
+          <p>Une <strong>fonction</strong> \(f\) est un procédé qui associe à tout nombre \(x\) d'un ensemble de départ (appelé <strong>ensemble de définition</strong>) au plus un nombre \(f(x)\), appelé <strong>image</strong> de \(x\) par \(f\).</p>
+        </div>
+
+        <p>On note \(f : x \mapsto f(x)\), ce qui se lit « \(f\) est la fonction qui à \(x\) associe \(f(x)\) ».</p>
+
+        <h3>Image et antécédent</h3>
+
+        <table class="math-table">
+          <tr><th>Terme</th><th>Définition</th><th>Exemple avec \(f(x)=2x+1\)</th></tr>
+          <tr><td><strong>Image</strong></td><td>Le résultat \(f(x)\) obtenu à partir de \(x\)</td><td>\(f(3) = 2\times 3+1 = 7\) → l'image de 3 est 7</td></tr>
+          <tr><td><strong>Antécédent</strong></td><td>Le \(x\) qui donne un résultat donné</td><td>L'antécédent de 7 est 3, car \(f(3)=7\)</td></tr>
+        </table>
+
+        <div class="callout callout-warn">
+          <div class="callout-label">⚠️ Attention</div>
+          <p>Un antécédent n'est pas forcément unique — plusieurs valeurs de \(x\) peuvent avoir la même image. En revanche, chaque \(x\) n'a <strong>qu'une seule image</strong>.</p>
+        </div>
+      </div>
+
+      <!-- 2. Ensemble de définition -->
+      <div class="lesson-block">
+        <h2><span class="h2-num">2</span> Ensemble de définition</h2>
+
+        <div class="callout callout-def">
+          <div class="callout-label">Définition</div>
+          <p>L'<strong>ensemble de définition</strong> \(\mathcal{D}_f\) d'une fonction \(f\) est l'ensemble de toutes les valeurs de \(x\) pour lesquelles \(f(x)\) est calculable (existe).</p>
+        </div>
+
+        <h3>Cas courants à connaître</h3>
+
+        <table class="math-table">
+          <tr><th>Type de fonction</th><th>Contrainte</th><th>Ensemble de définition</th></tr>
+          <tr><td>Polynôme : \(f(x)=x^2-3x+1\)</td><td>Aucune</td><td>\(\mathcal{D}_f = \mathbb{R}\)</td></tr>
+          <tr><td>Fraction : \(f(x)=\dfrac{1}{x-2}\)</td><td>Dénominateur \(\neq 0\)</td><td>\(\mathcal{D}_f = \mathbb{R}\setminus\{2\}\)</td></tr>
+          <tr><td>Racine carrée : \(f(x)=\sqrt{x+3}\)</td><td>Expression \(\geq 0\)</td><td>\(\mathcal{D}_f = [-3\,;+\infty[\)</td></tr>
+        </table>
+
+        <div class="callout callout-tip">
+          <div class="callout-label">💡 Méthode</div>
+          <p>Pour trouver \(\mathcal{D}_f\), cherche toujours les valeurs interdites : division par zéro, racine carrée d'un nombre négatif.</p>
+        </div>
+      </div>
+
+      <!-- 3. Représentation graphique -->
+      <div class="lesson-block">
+        <h2><span class="h2-num">3</span> Représentation graphique</h2>
+
+        <p>La <strong>courbe représentative</strong> d'une fonction \(f\), notée \(\mathcal{C}_f\), est l'ensemble de tous les points de coordonnées \(\big(x\,;\,f(x)\big)\) pour \(x \in \mathcal{D}_f\).</p>
+
+        <h3>Lire une courbe graphiquement</h3>
+
+        <div class="callout callout-prop">
+          <div class="callout-label">Propriété</div>
+          <p>
+            • Pour lire l'<strong>image</strong> de \(a\) : on part de \(x=a\) sur l'axe des abscisses, on monte jusqu'à \(\mathcal{C}_f\), puis on lit l'ordonnée : c'est \(f(a)\).<br><br>
+            • Pour trouver un <strong>antécédent</strong> de \(b\) : on part de \(y=b\) sur l'axe des ordonnées, on trace une horizontale jusqu'à \(\mathcal{C}_f\), puis on lit la (ou les) abscisse(s) correspondante(s).
+          </p>
+        </div>
+
+        <h3>Tableau de valeurs</h3>
+        <p>On construit un tableau de valeurs en calculant \(f(x)\) pour plusieurs valeurs de \(x\), puis on place les points \((x\,;\,f(x))\) dans un repère.</p>
+
+        <div class="formula-box">
+          Exemple : \(f(x) = x^2 - 2\)
+          <br><br>
+          \(f(-2)=2\quad f(-1)=-1\quad f(0)=-2\quad f(1)=-1\quad f(2)=2\)
+        </div>
+      </div>
+
+      <!-- 4. Parité -->
+      <div class="lesson-block">
+        <h2><span class="h2-num">4</span> Parité d'une fonction</h2>
+
+        <div class="callout callout-def">
+          <div class="callout-label">Définition</div>
+          <p>
+            • \(f\) est <strong>paire</strong> si pour tout \(x \in \mathcal{D}_f\) : \(f(-x) = f(x)\). Sa courbe est symétrique par rapport à l'axe des ordonnées.<br><br>
+            • \(f\) est <strong>impaire</strong> si pour tout \(x \in \mathcal{D}_f\) : \(f(-x) = -f(x)\). Sa courbe est symétrique par rapport à l'origine.
+          </p>
+        </div>
+
+        <table class="math-table">
+          <tr><th>Fonction</th><th>Vérification</th><th>Parité</th></tr>
+          <tr><td>\(f(x)=x^2\)</td><td>\(f(-x)=(-x)^2=x^2=f(x)\)</td><td>Paire</td></tr>
+          <tr><td>\(f(x)=x^3\)</td><td>\(f(-x)=(-x)^3=-x^3=-f(x)\)</td><td>Impaire</td></tr>
+          <tr><td>\(f(x)=x^2+x\)</td><td>Ni l'un ni l'autre</td><td>Ni paire ni impaire</td></tr>
+        </table>
+      </div>
+
+    </div><!-- /panel-cours -->
+
+    <!-- ═══════════════ EXERCICES ═══════════════ -->
+    <div class="tab-panel" id="panel-exercices">
+
+      <!-- Ex 1 -->
+      <div class="exercise" id="ex1">
+        <div class="exercise-header" onclick="toggleEx('ex1')">
+          <div class="exercise-header-left">
+            <div class="ex-num">1</div>
+            <div>
+              <div class="exercise-title">Images et antécédents</div>
+              <div style="margin-top:.2rem;"><span class="diff-badge diff-easy">Facile</span></div>
+            </div>
+          </div>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-statement">
+            <p>Soit \(f\) la fonction définie par \(f(x) = 3x - 5\).</p>
+            <ol style="padding-left:1.2rem; margin-top:.6rem; display:flex; flex-direction:column; gap:.4rem;">
+              <li>Calculer \(f(0)\), \(f(2)\) et \(f(-1)\).</li>
+              <li>Déterminer l'antécédent de 7 par \(f\).</li>
+              <li>Vérifier qu'il n'existe pas d'antécédent de 5 par \(g(x) = x^2 + 1\).</li>
+            </ol>
+          </div>
+          <button class="correction-btn" onclick="toggleCorrection('corr1')">👁 Voir la correction</button>
+          <div class="correction" id="corr1">
+            <div class="correction-label">✅ Correction</div>
+            <ol>
+              <li>\(f(0) = 3(0)-5 = -5\) &nbsp;|&nbsp; \(f(2) = 3(2)-5 = 1\) &nbsp;|&nbsp; \(f(-1) = 3(-1)-5 = -8\)</li>
+              <li>On cherche \(x\) tel que \(f(x)=7\) : \(3x-5=7 \Rightarrow 3x=12 \Rightarrow x=4\). L'antécédent de 7 est <strong>4</strong>.</li>
+              <li>On cherche \(x\) tel que \(x^2+1=5\) : \(x^2=4 \Rightarrow x=2\) ou \(x=-2\). Donc 5 a bien deux antécédents : 2 et −2. (Question piège — 5 admet des antécédents !)</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 2 -->
+      <div class="exercise" id="ex2">
+        <div class="exercise-header" onclick="toggleEx('ex2')">
+          <div class="exercise-header-left">
+            <div class="ex-num">2</div>
+            <div>
+              <div class="exercise-title">Ensemble de définition</div>
+              <div style="margin-top:.2rem;"><span class="diff-badge diff-medium">Intermédiaire</span></div>
+            </div>
+          </div>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-statement">
+            <p>Déterminer l'ensemble de définition de chacune des fonctions suivantes :</p>
+            <ol style="padding-left:1.2rem; margin-top:.6rem; display:flex; flex-direction:column; gap:.4rem;">
+              <li>\(f(x) = \dfrac{x+3}{x-1}\)</li>
+              <li>\(g(x) = \sqrt{2x - 6}\)</li>
+              <li>\(h(x) = \dfrac{1}{\sqrt{x+4}}\)</li>
+            </ol>
+          </div>
+          <button class="correction-btn" onclick="toggleCorrection('corr2')">👁 Voir la correction</button>
+          <div class="correction" id="corr2">
+            <div class="correction-label">✅ Correction</div>
+            <ol>
+              <li>Condition : \(x-1 \neq 0 \Rightarrow x \neq 1\). Donc \(\mathcal{D}_f = \mathbb{R}\setminus\{1\}\).</li>
+              <li>Condition : \(2x-6 \geq 0 \Rightarrow x \geq 3\). Donc \(\mathcal{D}_g = [3\,;+\infty[\).</li>
+              <li>Deux conditions cumulées : \(x+4 > 0\) (racine carrée ET dénominateur non nul) \(\Rightarrow x > -4\). Donc \(\mathcal{D}_h = \,]-4\,;+\infty[\).</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 3 -->
+      <div class="exercise" id="ex3">
+        <div class="exercise-header" onclick="toggleEx('ex3')">
+          <div class="exercise-header-left">
+            <div class="ex-num">3</div>
+            <div>
+              <div class="exercise-title">Parité d'une fonction</div>
+              <div style="margin-top:.2rem;"><span class="diff-badge diff-hard">Difficile</span></div>
+            </div>
+          </div>
+          <span class="toggle-icon">▼</span>
+        </div>
+        <div class="exercise-body">
+          <div class="exercise-statement">
+            <p>Pour chacune des fonctions suivantes, étudier la parité en justifiant rigoureusement.</p>
+            <ol style="padding-left:1.2rem; margin-top:.6rem; display:flex; flex-direction:column; gap:.4rem;">
+              <li>\(f(x) = x^4 - 3x^2 + 1\)</li>
+              <li>\(g(x) = x^3 - 2x\)</li>
+              <li>\(h(x) = x^2 + x - 1\)</li>
+            </ol>
+          </div>
+          <button class="correction-btn" onclick="toggleCorrection('corr3')">👁 Voir la correction</button>
+          <div class="correction" id="corr3">
+            <div class="correction-label">✅ Correction</div>
+            <ol>
+              <li>
+                \(\mathcal{D}_f = \mathbb{R}\), symétrique par rapport à 0. On calcule :<br>
+                \(f(-x) = (-x)^4 - 3(-x)^2 + 1 = x^4 - 3x^2 + 1 = f(x)\).<br>
+                Donc \(f\) est <strong>paire</strong>. Sa courbe est symétrique par rapport à l'axe des ordonnées.
+              </li>
+              <li>
+                \(\mathcal{D}_g = \mathbb{R}\), symétrique. On calcule :<br>
+                \(g(-x) = (-x)^3 - 2(-x) = -x^3 + 2x = -(x^3-2x) = -g(x)\).<br>
+                Donc \(g\) est <strong>impaire</strong>. Sa courbe est symétrique par rapport à l'origine.
+              </li>
+              <li>
+                \(h(-x) = (-x)^2 + (-x) - 1 = x^2 - x - 1\).<br>
+                \(h(-x) \neq h(x)\) et \(h(-x) \neq -h(x)\). Donc \(h\) est <strong>ni paire ni impaire</strong>.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel-exercices -->
+
+    <!-- ═══════════════ QUIZ ═══════════════ -->
+    <div class="tab-panel" id="panel-quiz">
+
+      <div class="quiz-intro" id="quiz-intro">
+        <div>
+          <h3>🎯 Quiz — Fonctions : Généralités</h3>
+          <p>6 questions pour valider ta compréhension du chapitre. Bonne chance !</p>
+        </div>
+        <div class="quiz-stats">
+          <div class="quiz-stat"><div class="quiz-stat-num">6</div><div class="quiz-stat-label">Questions</div></div>
+          <div class="quiz-stat"><div class="quiz-stat-num">~5</div><div class="quiz-stat-label">Minutes</div></div>
+        </div>
+        <button class="btn-start" onclick="startQuiz()">Commencer le quiz →</button>
+      </div>
+
+      <div id="quiz-container">
+        <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgress"></div></div>
+
+        <!-- Q1 -->
+        <div class="question-card current" id="q1">
+          <div class="question-num">Question 1 / 6</div>
+          <div class="question-text">Soit \(f(x) = 2x^2 - 3\). Quelle est l'image de \(-2\) par \(f\) ?</div>
+          <div class="options">
+            <div class="option" onclick="answer(this, 'q1', false, 'Non — attention : \(f(-2) = 2\times(-2)^2 - 3 = 2\times 4 - 3 = 5\).')"><span class="option-letter">A</span> \(-11\)</div>
+            <div class="option" onclick="answer(this, 'q1', true,  'Exact ! \(f(-2)=2\times(-2)^2-3=8-3=5\). Attention à bien élever au carré avant de multiplier.')"><span class="option-letter">B</span> \(5\)</div>
+            <div class="option" onclick="answer(this, 'q1', false, 'Non — \((-2)^2 = 4\), pas \(-4\).')"><span class="option-letter">C</span> \(-11\)</div>
+            <div class="option" onclick="answer(this, 'q1', false, 'Non — il ne faut pas oublier de soustraire 3.')"><span class="option-letter">D</span> \(8\)</div>
+          </div>
+          <div class="feedback-box" id="fb-q1"></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question-card" id="q2">
+          <div class="question-num">Question 2 / 6</div>
+          <div class="question-text">Quel est l'ensemble de définition de \(f(x) = \dfrac{x-1}{x+3}\) ?</div>
+          <div class="options">
+            <div class="option" onclick="answer(this,'q2',false,'Non — la valeur interdite est celle qui annule le dénominateur.')"><span class="option-letter">A</span> \(\mathbb{R}\setminus\{1\}\)</div>
+            <div class="option" onclick="answer(this,'q2',true,'Correct ! Le dénominateur \(x+3=0\) donne \(x=-3\), valeur interdite.')"><span class="option-letter">B</span> \(\mathbb{R}\setminus\{-3\}\)</div>
+            <div class="option" onclick="answer(this,'q2',false,'Non — un polynôme au dénominateur impose toujours une exclusion.')"><span class="option-letter">C</span> \(\mathbb{R}\)</div>
+            <div class="option" onclick="answer(this,'q2',false,'Non — seule la valeur \(-3\) est interdite, pas tout \(\mathbb{R}^-\).')"><span class="option-letter">D</span> \(\mathbb{R}^+\)</div>
+          </div>
+          <div class="feedback-box" id="fb-q2"></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="question-card" id="q3">
+          <div class="question-num">Question 3 / 6</div>
+          <div class="question-text">L'antécédent de \(9\) par la fonction \(f(x) = x^2\) est :</div>
+          <div class="options">
+            <div class="option" onclick="answer(this,'q3',false,'Non — \(9^2=81\), ce n\'est pas l\'antécédent de 9.')"><span class="option-letter">A</span> \(9\) uniquement</div>
+            <div class="option" onclick="answer(this,'q3',false,'Non — \((-3)^2=9\) aussi !')"><span class="option-letter">B</span> \(3\) uniquement</div>
+            <div class="option" onclick="answer(this,'q3',true,'Parfait ! \(3^2=9\) et \((-3)^2=9\). Une image peut avoir plusieurs antécédents.')"><span class="option-letter">C</span> \(3\) et \(-3\)</div>
+            <div class="option" onclick="answer(this,'q3',false,'Non — 9 a bien des antécédents par \(f(x)=x^2\).')"><span class="option-letter">D</span> Pas d'antécédent</div>
+          </div>
+          <div class="feedback-box" id="fb-q3"></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="question-card" id="q4">
+          <div class="question-num">Question 4 / 6</div>
+          <div class="question-text">La fonction \(f(x) = x^4 - 2x^2\) est :</div>
+          <div class="options">
+            <div class="option" onclick="answer(this,'q4',true,'Exact ! \(f(-x)=(-x)^4-2(-x)^2=x^4-2x^2=f(x)\). La courbe est symétrique par rapport à l\'axe des ordonnées.')"><span class="option-letter">A</span> Paire</div>
+            <div class="option" onclick="answer(this,'q4',false,'Non — vérifies : \(f(-x)=f(x)\), pas \(-f(x)\).')"><span class="option-letter">B</span> Impaire</div>
+            <div class="option" onclick="answer(this,'q4',false,'Non — calcule \(f(-x)\) et compare à \(f(x)\).')"><span class="option-letter">C</span> Ni paire ni impaire</div>
+            <div class="option" onclick="answer(this,'q4',false,'Non — la parité se définit bien pour cette fonction sur \(\mathbb{R}\).')"><span class="option-letter">D</span> La parité n'est pas définie</div>
+          </div>
+          <div class="feedback-box" id="fb-q4"></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="question-card" id="q5">
+          <div class="question-num">Question 5 / 6</div>
+          <div class="question-text">L'ensemble de définition de \(g(x) = \sqrt{5 - x}\) est :</div>
+          <div class="options">
+            <div class="option" onclick="answer(this,'q5',false,'Non — c\'est l\'inverse. Il faut \(5-x \geq 0\), donc \(x \leq 5\).')"><span class="option-letter">A</span> \([5\,;+\infty[\)</div>
+            <div class="option" onclick="answer(this,'q5',true,'Parfait ! \(5-x \geq 0 \Rightarrow x \leq 5\), donc \(\mathcal{D}_g = ]-\infty\,;5]\).')"><span class="option-letter">B</span> \(]-\infty\,;5]\)</div>
+            <div class="option" onclick="answer(this,'q5',false,'Non — sous la racine, l\'expression doit être \(\geq 0\), pas \(> 0\).')"><span class="option-letter">C</span> \(]-\infty\,;5[\)</div>
+            <div class="option" onclick="answer(this,'q5',false,'Non — la racine carrée impose une contrainte sur le domaine.')"><span class="option-letter">D</span> \(\mathbb{R}\)</div>
+          </div>
+          <div class="feedback-box" id="fb-q5"></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="question-card" id="q6">
+          <div class="question-num">Question 6 / 6</div>
+          <div class="question-text">Sur la courbe de \(f\), le point \(A(3\,;\,-1)\) appartient à \(\mathcal{C}_f\). Que peut-on en déduire ?</div>
+          <div class="options">
+            <div class="option" onclick="answer(this,'q6',false,'Non — si \(A(3\,;-1)\) est sur la courbe, c\'est \(f(3)\) qui vaut \(-1\).')"><span class="option-letter">A</span> \(f(-1) = 3\)</div>
+            <div class="option" onclick="answer(this,'q6',true,'Exact ! Le point \((x\,;y)\) appartient à \(\mathcal{C}_f\) signifie \(f(x)=y\), soit ici \(f(3)=-1\).')"><span class="option-letter">B</span> \(f(3) = -1\)</div>
+            <div class="option" onclick="answer(this,'q6',false,'Non — un antécédent de \(-1\) est bien \(3\), mais l\'image de \(-1\) n\'est pas forcément \(3\).')"><span class="option-letter">C</span> \(f(-1) = -3\)</div>
+            <div class="option" onclick="answer(this,'q6',false,'Non — le point appartient à la courbe donc on peut bien déduire une information.')"><span class="option-letter">D</span> On ne peut rien déduire</div>
+          </div>
+          <div class="feedback-box" id="fb-q6"></div>
+        </div>
+
+        <div class="quiz-nav">
+          <button class="btn-next" id="btn-next" onclick="nextQuestion()">Question suivante →</button>
+        </div>
+      </div>
+
+      <!-- Résultat -->
+      <div id="quiz-result">
+        <div class="score-ring" id="scoreRing">
+          <div class="score-num" id="scoreNum">0</div>
+          <div class="score-total" id="scoreTot">/ 6</div>
+        </div>
+        <h3 id="result-title">Résultat</h3>
+        <p id="result-msg"></p>
+        <button class="btn-retry" onclick="restartQuiz()">🔄 Recommencer le quiz</button>
+      </div>
+
+    </div><!-- /panel-quiz -->
+
+  </main>
+</div>
+
+<script>
+  // ── TABS ──────────────────────────────────────────────
+  function switchTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    document.getElementById('tab-' + name).classList.add('active');
+    // Sidebar active
+    document.querySelectorAll('.sidebar-nav a').forEach(a => a.classList.remove('active'));
+  }
+
+  // ── EXERCICES ─────────────────────────────────────────
+  function toggleEx(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function toggleCorrection(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('visible');
+    const btn = el.previousElementSibling;
+    btn.textContent = el.classList.contains('visible') ? '🙈 Masquer la correction' : '👁 Voir la correction';
+  }
+
+  // ── QUIZ ──────────────────────────────────────────────
+  const questions = ['q1','q2','q3','q4','q5','q6'];
+  let current = 0;
+  let score = 0;
+  let answered = false;
+
+  function startQuiz() {
+    document.getElementById('quiz-intro').style.display = 'none';
+    document.getElementById('quiz-container').style.display = 'block';
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const pct = (current / questions.length) * 100;
+    document.getElementById('quizProgress').style.width = pct + '%';
+  }
+
+  function answer(el, qid, isCorrect, feedback) {
+    if (answered) return;
+    answered = true;
+
+    // Disable all options
+    el.closest('.options').querySelectorAll('.option').forEach(o => {
+      o.classList.add('disabled');
+      o.onclick = null;
+    });
+
+    el.classList.add(isCorrect ? 'correct' : 'wrong');
+
+    // Highlight correct if wrong was chosen
+    if (!isCorrect) {
+      el.closest('.options').querySelectorAll('.option').forEach(o => {
+        const handler = o.getAttribute('onclick');
+        // Mark the correct one
+      });
+    }
+
+    // Feedback
+    const fb = document.getElementById('fb-' + qid);
+    fb.textContent = (isCorrect ? '✅ ' : '❌ ') + feedback;
+    fb.className = 'feedback-box ' + (isCorrect ? 'correct' : 'wrong');
+
+    if (isCorrect) score++;
+
+    // Show next button
+    const btn = document.getElementById('btn-next');
+    btn.classList.add('visible');
+    btn.textContent = current + 1 < questions.length ? 'Question suivante →' : 'Voir mon score →';
+
+    // MathJax re-render
+    renderMathInElement(fb, katexOpts);
+  }
+
+  function nextQuestion() {
+    current++;
+    answered = false;
+
+    document.querySelectorAll('.question-card').forEach(c => c.classList.remove('current'));
+    document.getElementById('btn-next').classList.remove('visible');
+
+    if (current < questions.length) {
+      document.getElementById(questions[current]).classList.add('current');
+      updateProgress();
+      if (window.MathJax) MathJax.typesetPromise([document.getElementById(questions[current])]);
+    } else {
+      showResult();
+    }
+  }
+
+  function showResult() {
+    document.getElementById('quiz-container').style.display = 'none';
+    const result = document.getElementById('quiz-result');
+    result.style.display = 'block';
+
+    const ring = document.getElementById('scoreRing');
+    document.getElementById('scoreNum').textContent = score;
+
+    const pct = score / questions.length;
+    let cls, title, msg;
+
+    if (pct >= 0.83) {
+      cls = 'score-excellent'; title = 'Excellent travail ! 🎉';
+      msg = 'Tu maîtrises très bien les généralités sur les fonctions. Continue comme ça !';
+    } else if (pct >= 0.5) {
+      cls = 'score-good'; title = 'Pas mal !';
+      msg = 'Tu as de bonnes bases. Relis les notions sur lesquelles tu as hésité, puis retente le quiz.';
+    } else {
+      cls = 'score-retry'; title = 'À retravailler';
+      msg = 'Ne te décourage pas — relis le cours attentivement, fais les exercices corrigés, puis retente le quiz.';
+    }
+
+    ring.className = 'score-ring ' + cls;
+    document.getElementById('result-title').textContent = title;
+    document.getElementById('result-msg').textContent = msg;
+
+    // Update sidebar progress
+    const pctDisplay = Math.round(pct * 100) + '%';
+    document.getElementById('progressPct').textContent = pctDisplay;
+    document.getElementById('progressFill').style.width = pctDisplay;
+  }
+
+  function restartQuiz() {
+    current = 0; score = 0; answered = false;
+
+    document.querySelectorAll('.question-card').forEach((c, i) => {
+      c.classList.remove('current');
+      c.querySelectorAll('.option').forEach(o => {
+        o.className = 'option';
+      });
+      c.querySelectorAll('.feedback-box').forEach(f => f.className = 'feedback-box');
+    });
+
+    document.getElementById('quiz-result').style.display = 'none';
+    document.getElementById('quiz-container').style.display = 'block';
+    document.getElementById(questions[0]).classList.add('current');
+    document.getElementById('btn-next').classList.remove('visible');
+    updateProgress();
+  }
+</script>
+  <script>
+    const katexOpts = {
+      delimiters: [
+        {left: '\\[', right: '\\]', display: true},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '$', right: '$', display: false}
+      ],
+      throwOnError: false,
+      output: 'html'
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+      renderMathInElement(document.body, katexOpts);
+    });
+  </script>
+</body>
+</html>

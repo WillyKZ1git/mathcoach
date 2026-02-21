@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MathCoach — Cours particuliers de mathématiques</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #1a2e4a;
+      --blue:      #2d6a9f;
+      --blue-light:#e8f4fd;
+      --accent:    #4a9fd4;
+      --white:     #ffffff;
+      --text:      #1a1a2e;
+      --text-muted:#5a6a80;
+      --border:    #d4e6f5;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVBAR ─────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: var(--navy);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 68px;
+      box-shadow: 0 2px 20px rgba(0,0,0,.25);
+    }
+
+    .nav-logo {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.5rem;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: .5px;
+    }
+
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links {
+      display: flex; align-items: center; gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255,255,255,.8);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      letter-spacing: .3px;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-links .btn-nav {
+      background: var(--accent);
+      color: var(--white);
+      padding: .5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: background .2s, transform .15s;
+    }
+
+    .nav-links .btn-nav:hover { background: #3a8cc0; transform: translateY(-1px); }
+
+    /* Hamburger */
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: .3s; }
+
+    /* ─── HERO ───────────────────────────────────────────── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy) 0%, #1e3d5c 50%, #244b72 100%);
+      display: flex; align-items: center;
+      padding: 100px 2.5rem 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Geometric decoration */
+    .hero::before {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,159,212,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute; bottom: -60px; left: 30%;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(74,159,212,.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* Floating math symbols */
+    .math-float {
+      position: absolute;
+      font-family: 'Nunito', sans-serif;
+      color: rgba(255,255,255,.06);
+      font-size: 8rem;
+      font-weight: 900;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .math-float.f1 { top: 12%; right: 8%; font-size: 10rem; animation: floatY 6s ease-in-out infinite; }
+    .math-float.f2 { top: 55%; right: 18%; font-size: 6rem; animation: floatY 8s ease-in-out infinite reverse; }
+    .math-float.f3 { bottom: 15%; left: 5%; font-size: 7rem; animation: floatY 7s ease-in-out infinite; }
+    .math-float.f4 { top: 25%; left: 55%; font-size: 5rem; animation: floatY 9s ease-in-out infinite reverse; }
+
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .hero-content { max-width: 680px; position: relative; z-index: 2; animation: fadeUp .8s ease both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(74,159,212,.25);
+      border: 1px solid rgba(74,159,212,.4);
+      color: var(--accent);
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: .35rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      position: relative;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.75);
+      line-height: 1.7;
+      max-width: 540px;
+      margin-bottom: 2.2rem;
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      padding: .85rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(74,159,212,.4);
+    }
+
+    .btn-primary:hover { background: #3a8cc0; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(74,159,212,.5); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1.5px solid rgba(255,255,255,.4);
+      padding: .85rem 2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: border-color .2s, background .2s;
+    }
+
+    .btn-outline:hover { border-color: rgba(255,255,255,.8); background: rgba(255,255,255,.05); }
+
+    /* ─── STATS STRIP ────────────────────────────────────── */
+    .stats {
+      background: var(--white);
+      display: flex; justify-content: center; gap: 0;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp .8s .2s ease both;
+    }
+
+    .stat-item {
+      flex: 1; max-width: 220px;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Nunito', sans-serif;
+      font-size: 2.2rem;
+      color: var(--blue);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: .85rem;
+      color: var(--text-muted);
+      margin-top: .35rem;
+      font-weight: 400;
+    }
+
+    /* ─── SECTIONS COMMUNES ──────────────────────────────── */
+    section { padding: 80px 2.5rem; }
+
+    .section-label {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: .6rem;
+    }
+
+    .section-title {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    .section-header { margin-bottom: 3rem; }
+
+    .container { max-width: 1100px; margin: 0 auto; }
+
+    /* ─── NIVEAUX ─────────────────────────────────────────── */
+    .levels { background: var(--blue-light); }
+
+    .levels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .level-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(26,46,74,.08);
+      transition: transform .25s, box-shadow .25s;
+      text-decoration: none;
+      color: inherit;
+      display: flex; flex-direction: column;
+    }
+
+    .level-card:hover { transform: translateY(-5px); box-shadow: 0 10px 32px rgba(26,46,74,.15); }
+
+    .level-card-top {
+      background: var(--navy);
+      padding: 1.8rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+
+    .level-icon {
+      width: 48px; height: 48px;
+      background: rgba(74,159,212,.25);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .level-name {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.3rem;
+      color: var(--white);
+    }
+
+    .level-tag {
+      font-size: .75rem;
+      color: rgba(255,255,255,.55);
+      margin-top: .1rem;
+    }
+
+    .level-card-body { padding: 1.5rem; flex: 1; }
+
+    .level-topics {
+      list-style: none;
+      display: flex; flex-direction: column; gap: .6rem;
+    }
+
+    .level-topics li {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .9rem;
+      color: var(--text-muted);
+    }
+
+    .level-topics li::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .level-card-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .demo-badge {
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--blue);
+      background: var(--blue-light);
+      padding: .25rem .7rem;
+      border-radius: 20px;
+    }
+
+    .card-link {
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--blue);
+      display: flex; align-items: center; gap: .3rem;
+    }
+
+    .card-link::after { content: '→'; transition: transform .2s; }
+    .level-card:hover .card-link::after { transform: translateX(4px); }
+
+    /* ─── OFFRE ───────────────────────────────────────────── */
+    .offer { background: var(--white); }
+
+    .offer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .offer-card {
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1.5px solid var(--border);
+    }
+
+    .offer-card.premium {
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .offer-card.premium::before {
+      content: '';
+      position: absolute; top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(74,159,212,.2), transparent 70%);
+    }
+
+    .offer-label {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .offer-card.premium .offer-label { color: var(--accent); }
+
+    .offer-card h3 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.4rem;
+      margin-bottom: .8rem;
+      color: var(--navy);
+    }
+
+    .offer-card.premium h3 { color: var(--white); }
+
+    .offer-list {
+      list-style: none;
+      display: flex; flex-direction: column; gap: .7rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .offer-list li {
+      display: flex; align-items: flex-start; gap: .7rem;
+      font-size: .92rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .offer-card.premium .offer-list li { color: rgba(255,255,255,.75); }
+
+    .offer-list li .check {
+      width: 18px; height: 18px;
+      background: var(--blue-light);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: .65rem;
+      color: var(--blue);
+    }
+
+    .offer-card.premium .offer-list li .check {
+      background: rgba(74,159,212,.25);
+      color: var(--accent);
+    }
+
+    /* ─── FONCTIONNEMENT ─────────────────────────────────── */
+    .how { background: var(--blue-light); }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      position: relative;
+      margin-bottom: 2.5rem;
+    }
+
+    .plus-cta {
+      background: var(--navy);
+      border-radius: 14px;
+      padding: 2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .plus-cta-text { flex: 1; min-width: 260px; }
+
+    .plus-badge {
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: .6rem;
+      letter-spacing: -.3px;
+    }
+
+    .plus-badge span { color: var(--accent); }
+
+    .plus-cta-text p {
+      font-size: .95rem;
+      color: rgba(255,255,255,.7);
+      line-height: 1.6;
+    }
+
+    .plus-cta-text strong { color: var(--white); }
+
+    .step {
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+
+    .step-num {
+      width: 52px; height: 52px;
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 auto 1rem;
+    }
+
+    .step h4 {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--navy);
+      margin-bottom: .5rem;
+    }
+
+    .step p { font-size: .88rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ─── CTA FINAL ──────────────────────────────────────── */
+    .cta-section {
+      background: var(--navy);
+      text-align: center;
+      padding: 80px 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute; top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(74,159,212,.15), transparent 65%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-family: 'Nunito', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--white);
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .cta-section p {
+      color: rgba(255,255,255,.7);
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────── */
+    footer {
+      background: #111e2e;
+      padding: 2rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    footer .footer-logo {
+      font-family: 'Nunito', sans-serif;
+      color: rgba(255,255,255,.5);
+      font-size: 1rem;
+    }
+
+    footer .footer-logo span { color: var(--accent); }
+
+    footer p {
+      font-size: .8rem;
+      color: rgba(255,255,255,.3);
+    }
+
+    footer nav a {
+      font-size: .8rem;
+      color: rgba(255,255,255,.4);
+      text-decoration: none;
+      margin-left: 1.2rem;
+      transition: color .2s;
+    }
+
+    footer nav a:hover { color: rgba(255,255,255,.8); }
+
+    /* ─── MOBILE ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; flex-direction: column; position: absolute; top: 68px; left: 0; right: 0; background: var(--navy); padding: 1.5rem 2rem; gap: 1.2rem; }
+      .nav-links.open { display: flex; }
+      .hamburger { display: flex; }
+      .stats { flex-wrap: wrap; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); flex: 1 1 50%; }
+      .offer-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      section { padding: 60px 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="index.html" class="nav-logo">Math<span>Coach</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#niveaux">Cours</a></li>
+      <li><a href="#offre">Abonnement</a></li>
+      <li><a href="quiz.html">Quiz</a></li>
+      <li><a href="fiches.html">Fiches</a></li>
+      <li><a href="reservation.html" class="btn-nav">Réserver une séance</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="math-float f1">∑</div>
+    <div class="math-float f2">∫</div>
+    <div class="math-float f3">π</div>
+    <div class="math-float f4">√</div>
+    <div class="hero-content">
+      <div class="hero-badge">📐 Cours particuliers · Lycée</div>
+      <h1>Les maths, enfin <em>claires</em> et à ta portée.</h1>
+      <p>Cours structurés, exercices corrigés, quiz interactifs et séances de coaching en ligne — tout ce qu'il faut pour progresser vraiment, à ton rythme.</p>
+      <div class="hero-cta">
+        <a href="reservation.html" class="btn-primary">Réserver une séance</a>
+        <a href="#niveaux" class="btn-outline">Voir les cours gratuits</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Niveaux couverts</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">30+</div>
+      <div class="stat-label">Chapitres disponibles</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">100+</div>
+      <div class="stat-label">Exercices corrigés</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">50+</div>
+      <div class="stat-label">Quiz interactifs</div>
+    </div>
+  </div>
+
+  <!-- NIVEAUX -->
+  <section class="levels" id="niveaux">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Contenu gratuit</div>
+        <h2 class="section-title">Explore un chapitre de démo<br>par niveau</h2>
+        <p class="section-sub">Chaque niveau propose un chapitre complet en accès libre pour que tu puisses juger par toi-même de la qualité des cours avant de t'abonner.</p>
+      </div>
+      <div class="levels-grid">
+
+        <!-- Seconde -->
+        <a href="seconde/demo.html" class="level-card">
+          <div class="level-card-top">
+            <div class="level-icon">2️⃣</div>
+            <div>
+              <div class="level-name">Seconde</div>
+              <div class="level-tag">Fonctions · Géométrie · Stats</div>
+            </div>
+          </div>
+          <div class="level-card-body">
+            <ul class="level-topics">
+              <li>Fonctions et représentations graphiques</li>
+              <li>Équations et inéquations</li>
+              <li>Géométrie dans le plan et l'espace</li>
+              <li>Statistiques et probabilités</li>
+            </ul>
+          </div>
+          <div class="level-card-footer">
+            <span class="demo-badge">Démo gratuite</span>
+            <span class="card-link">Voir le cours</span>
+          </div>
+        </a>
+
+        <!-- Première -->
+        <a href="premiere/demo.html" class="level-card">
+          <div class="level-card-top">
+            <div class="level-icon">1️⃣</div>
+            <div>
+              <div class="level-name">Première</div>
+              <div class="level-tag">Analyse · Suites · Proba</div>
+            </div>
+          </div>
+          <div class="level-card-body">
+            <ul class="level-topics">
+              <li>Dérivation et étude de fonctions</li>
+              <li>Suites numériques</li>
+              <li>Trigonométrie</li>
+              <li>Probabilités conditionnelles</li>
+            </ul>
+          </div>
+          <div class="level-card-footer">
+            <span class="demo-badge">Démo gratuite</span>
+            <span class="card-link">Voir le cours</span>
+          </div>
+        </a>
+
+        <!-- Terminale -->
+        <a href="terminale/demo.html" class="level-card">
+          <div class="level-card-top">
+            <div class="level-icon">🎓</div>
+            <div>
+              <div class="level-name">Terminale</div>
+              <div class="level-tag">Intégrales · Limites · Expo</div>
+            </div>
+          </div>
+          <div class="level-card-body">
+            <ul class="level-topics">
+              <li>Limites et continuité</li>
+              <li>Intégration</li>
+              <li>Fonctions logarithme et exponentielle</li>
+              <li>Dénombrement et loi binomiale</li>
+            </ul>
+          </div>
+          <div class="level-card-footer">
+            <span class="demo-badge">Démo gratuite</span>
+            <span class="card-link">Voir le cours</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OFFRE -->
+  <section class="offer" id="offre">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Abonnement</div>
+        <h2 class="section-title">Accès libre ou accès complet,<br>à toi de choisir</h2>
+      </div>
+      <div class="offer-grid">
+
+        <!-- Gratuit -->
+        <div class="offer-card">
+          <div class="offer-label">Accès libre</div>
+          <h3>Contenu vitrine</h3>
+          <ul class="offer-list">
+            <li><span class="check">✓</span>1 chapitre de démo par niveau (Seconde, Première, Terminale)</li>
+            <li><span class="check">✓</span>Quelques quiz de découverte</li>
+            <li><span class="check">✓</span>Présentation des méthodes pédagogiques</li>
+            <li><span class="check">✓</span>Accès à la page de réservation de séances</li>
+          </ul>
+          <a href="#niveaux" class="btn-outline" style="display:inline-block; color: var(--blue); border-color: var(--border); font-size:.9rem; padding:.7rem 1.5rem; border-radius:8px; text-decoration:none; font-weight:600; border: 1.5px solid var(--border);">Explorer gratuitement</a>
+        </div>
+
+        <!-- Premium -->
+        <div class="offer-card premium">
+          <div class="offer-label">Abonnement mensuel</div>
+          <h3>Accès complet</h3>
+          <ul class="offer-list">
+            <li><span class="check">✓</span>Tous les cours des 3 niveaux, chapitre par chapitre</li>
+            <li><span class="check">✓</span>Exercices corrigés en détail pour chaque notion</li>
+            <li><span class="check">✓</span>Quiz interactifs avec score et correction immédiate</li>
+            <li><span class="check">✓</span>Fiches de révision téléchargeables</li>
+            <li><span class="check">✓</span>Tarif préférentiel sur les séances de coaching</li>
+          </ul>
+          <a href="reservation.html" class="btn-primary" style="display:inline-block; font-size:.9rem; padding:.7rem 1.5rem;">Prendre contact</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FONCTIONNEMENT -->
+  <section class="how">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-label">Comment ça marche</div>
+        <h2 class="section-title">Simple, rapide, efficace</h2>
+        <p class="section-sub">De l'inscription à ta première séance, tout est pensé pour que tu te concentres sur l'essentiel : progresser.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h4>Tu explores les démos</h4>
+          <p>Un chapitre gratuit par niveau pour découvrir la méthode et le style des cours.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h4>Tu travailles à ton rythme</h4>
+          <p>Cours, quiz, exercices corrigés — tout est disponible 24h/24, sans limite.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h4>Tu réserves une séance</h4>
+          <p>Un point de coaching pour poser tes questions, approfondir ou préparer un contrôle.</p>
+        </div>
+      </div>
+
+      <!-- Encart MathCoach+ -->
+      <div class="plus-cta">
+        <div class="plus-cta-text">
+          <div class="plus-badge">MathCoach<span>+</span></div>
+          <p>Tu veux un accès illimité à tous les cours, exercices corrigés, quiz et fiches de révision ? Rejoins <strong>MathCoach+</strong> et profite de tout le contenu sans restriction.</p>
+        </div>
+        <a href="reservation.html" class="btn-primary">Découvrir MathCoach+</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section class="cta-section">
+    <h2>Prêt à changer ton rapport aux maths ?</h2>
+    <p>Réserve une première séance — sans engagement, juste pour voir si ça te correspond.</p>
+    <a href="reservation.html" class="btn-primary">Réserver une séance gratuite</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Math<span>Coach</span></div>
+    <p>© 2025 MathCoach — Cours particuliers de mathématiques</p>
+    <nav>
+      <a href="mentions.html">Mentions légales</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    // Ferme le menu si on clique en dehors
+    document.addEventListener('click', (e) => {
+      const nav = document.getElementById('navLinks');
+      const hamburger = document.getElementById('hamburger');
+      if (!nav.contains(e.target) && !hamburger.contains(e.target)) {
+        nav.classList.remove('open');
+      }
+    });
+
+    // Animation au scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.style.animation = 'fadeUp .6s ease both';
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.level-card, .offer-card, .step').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
